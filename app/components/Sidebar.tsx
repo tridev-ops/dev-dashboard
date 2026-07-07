@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
-import { Folder, Plus, ChevronRight, Terminal, Key, GitBranch } from 'lucide-react'
+import { Folder, Plus, ChevronRight, Terminal, Key, GitBranch, LogOut } from 'lucide-react'
 import { getProjects, createProject } from '@/app/actions/projects'
+import { logout } from '@/app/actions/auth'
 
 interface Project {
   id: string
@@ -15,7 +16,7 @@ export default function Sidebar() {
   const [projects, setProjects] = useState<Project[]>([])
   const [newProjectName, setNewProjectName] = useState('')
   const [isAdding, setIsAdding] = useState(false)
-  
+
   const params = useParams()
   const router = useRouter()
   const activeProjectId = params.id as string
@@ -103,9 +104,8 @@ export default function Sidebar() {
                 <Link
                   key={project.id}
                   href={`/dashboard/projects/${project.id}`}
-                  className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm group transition-colors ${
-                    isActive ? 'bg-zinc-900 text-emerald-400 font-medium' : 'hover:bg-zinc-900 hover:text-zinc-200'
-                  }`}
+                  className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm group transition-colors ${isActive ? 'bg-zinc-900 text-emerald-400 font-medium' : 'hover:bg-zinc-900 hover:text-zinc-200'
+                    }`}
                 >
                   <div className="flex items-center gap-2.5 truncate">
                     <Folder className={`w-4 h-4 ${isActive ? 'text-emerald-400' : 'text-zinc-500 group-hover:text-zinc-400'}`} />
@@ -117,6 +117,17 @@ export default function Sidebar() {
             })}
           </div>
         </div>
+      </div>
+
+      {/* NEW LOGOUT PANEL FOOTER */}
+      <div className="pt-4 border-t border-zinc-800">
+        <button
+          onClick={() => logout()}
+          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm text-zinc-500 hover:bg-zinc-900 hover:text-red-400 transition-colors group"
+        >
+          <LogOut className="w-4 h-4 text-zinc-500 group-hover:text-red-400 transition-colors" />
+          <span>Exit Session</span>
+        </button>
       </div>
     </aside>
   )
